@@ -1,5 +1,20 @@
 const App = () => {
-  return <div>Hello World</div>;
+  const categories = [
+    {
+      id: 1,
+    },
+  ];
+  return (
+    <div className="categories-container ">
+      <div className="category-container">
+        {/* <img></img> */}
+        <div className="category-body-container">
+          <h2>Hats</h2>
+          <p>Shop Now</p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default App;
