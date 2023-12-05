@@ -1,7 +1,13 @@
 import { initializeApp } from "firebase/app";
 
 // import method from authentication
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithRedirect,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 // import metod from fireStore
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
@@ -28,11 +34,18 @@ export const auth = getAuth();
 export const signInWithGooglePopup = () =>
   signInWithPopup(auth, googleProvider);
 
+// export const signInWithRedirect = () =>
+//   signInWithRedirect(auth, googleProvider);
+
 // initialize fireStore , db : database
 export const db = getFirestore();
 
 // getting data from authemtication service and store that inside firebase
-export const creatuserDocumentFromAuth = async (userAuth) => {
+export const creatuserDocumentFromAuth = async (
+  userAuth,
+  additioanlInformation
+) => {
+  if (!userAuth) return; // for protecting user and passsword
   const userDocRef = doc(db, "user", userAuth.uid); // user is collection
   console.log(userDocRef);
 
@@ -52,10 +65,16 @@ export const creatuserDocumentFromAuth = async (userAuth) => {
         displayName,
         email,
         createAt,
+        ...additioanlInformation,
       });
     } catch (error) {
       console.log("error creating the user", error.massage);
     }
   }
   return userDocRef;
+};
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await createUserWithEmailAndPassword(auth, email, password);
 };
