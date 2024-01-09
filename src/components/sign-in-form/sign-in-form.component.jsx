@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import FormInput from "../form-input/form-input.component";
 import {
   signInWithGooglePopup,
@@ -9,6 +9,7 @@ import {
 import "./sign-in-form.styles.scss";
 
 import Button from "../button/button.component";
+import { UserContext } from "../../contexts/user.context";
 
 const defaultFormField = {
   email: "",
@@ -19,7 +20,7 @@ const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormField);
   const { email, password } = formFields;
 
-  //   console.log(formFields);
+  const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => {
     setFormFields(defaultFormField);
@@ -35,17 +36,20 @@ const SignInForm = () => {
     // confirm pass matches with confirm pass
 
     try {
-      const response = await signInAuthUserWithEmailAndPassword(
+      const { user } = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-      console.log(response);
+      console.log("ff", user, setCurrentUser);
+      setCurrentUser(user);
+
+      // console.log(setCurrentUser);
+
       resetFormFields();
     } catch (error) {
       if (error.code === "auth/invalid-login-credentials") {
         alert("incorrect password or email");
       }
-      console.log(error);
     }
   };
 
