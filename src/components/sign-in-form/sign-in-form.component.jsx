@@ -40,7 +40,7 @@ const SignInForm = () => {
         email,
         password
       );
-      console.log("ff", user, setCurrentUser);
+
       setCurrentUser(user);
 
       // console.log(setCurrentUser);
